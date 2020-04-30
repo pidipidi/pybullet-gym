@@ -44,7 +44,7 @@ class BaseBulletEnv(gym.Env):
 		return [seed]
 
 	def _reset(self):
-		if self.physicsClientId < 0:
+		if self.physicsClientId < 0 or self._p.isConnected()==0:
 			self.ownsPhysicsClient = True
 
 			if self.isRender:

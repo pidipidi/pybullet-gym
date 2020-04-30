@@ -32,7 +32,7 @@ import pybulletgym.envs
 from tensorforce import TensorForceError
 from tensorforce.agents import Agent
 from tensorforce.execution import Runner
-from tensorforce.contrib.openai_gym import OpenAIGym
+from tensorforce.environments.openai_gym import OpenAIGym
 
 # Roboschool
 # Examples (train)

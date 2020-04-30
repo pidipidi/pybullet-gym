@@ -133,49 +133,49 @@ class MJCFBasedRobot(XmlBasedRobot):
 
 
 class URDFBasedRobot(XmlBasedRobot):
-	"""
-	Base class for URDF .xml based robots.
-	"""
+    """
+    Base class for URDF .xml based robots.
+    """
+    def __init__(self, model_urdf, robot_name, action_dim, obs_dim, basePosition=[0, 0, 0], baseOrientation=[0, 0, 0, 1], fixed_base=False, self_collision=False):
+        XmlBasedRobot.__init__(self, robot_name, action_dim, obs_dim, self_collision)
+        self.model_urdf = model_urdf
+        self.basePosition = basePosition
+        self.baseOrientation = baseOrientation
+        self.fixed_base = fixed_base
+        self.doneLoading = 0
 
-	def __init__(self, model_urdf, robot_name, action_dim, obs_dim, basePosition=[0, 0, 0], baseOrientation=[0, 0, 0, 1], fixed_base=False, self_collision=False):
-		XmlBasedRobot.__init__(self, robot_name, action_dim, obs_dim, self_collision)
+    def reset(self, bullet_client):
+        self._p = bullet_client
+        self.ordered_joints = []
 
-		self.model_urdf = model_urdf
-		self.basePosition = basePosition
-		self.baseOrientation = baseOrientation
-		self.fixed_base = fixed_base
+        full_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "robots", self.model_urdf)
+        
+        if self.doneLoading == 0:
+            self.doneLoading=1
+            if self.self_collision:
+                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
+                    self._p.loadURDF(full_path,
+                    basePosition=self.basePosition,
+                    baseOrientation=self.baseOrientation,
+                    useFixedBase=self.fixed_base,
+                    flags=pybullet.URDF_USE_SELF_COLLISION))
+            else:
+                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
+                    self._p.loadURDF(full_path,
+                    basePosition=self.basePosition,
+                    baseOrientation=self.baseOrientation,
+                    useFixedBase=self.fixed_base))
 
-	def reset(self, bullet_client):
-		self._p = bullet_client
-		self.ordered_joints = []
+        self.robot_specific_reset(self._p)
 
-		full_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "robots", self.model_urdf)
-		print(full_path)
+        s = self.calc_state()  # optimization: calc_state() can calculate something in self.* for calc_potential() to use
+        self.potential = self.calc_potential()
 
-		if self.self_collision:
-			self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
-				self._p.loadURDF(full_path,
-				basePosition=self.basePosition,
-				baseOrientation=self.baseOrientation,
-				useFixedBase=self.fixed_base,
-				flags=pybullet.URDF_USE_SELF_COLLISION))
-		else:
-			self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
-				self._p.loadURDF(full_path,
-				basePosition=self.basePosition,
-				baseOrientation=self.baseOrientation,
-				useFixedBase=self.fixed_base))
+        return s
 
-		self.robot_specific_reset(self._p)
-
-		s = self.calc_state()  # optimization: calc_state() can calculate something in self.* for calc_potential() to use
-		self.potential = self.calc_potential()
-
-		return s
-
-	@staticmethod
-	def calc_potential():
-		return 0
+    @staticmethod
+    def calc_potential():
+        return 0
 
 
 class SDFBasedRobot(XmlBasedRobot):

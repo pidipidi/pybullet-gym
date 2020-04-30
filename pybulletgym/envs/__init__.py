@@ -1,5 +1,14 @@
 from gym.envs.registration import register
 
+# custom envs
+## peg
+register(
+	id='CuboidPeginhole2DPyBulletEnv-v0',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.peginhole_2d_env:CuboidPeginhole2DPyBulletEnv',
+	max_episode_steps=150,
+	reward_threshold=20.0,
+	)
+
 # roboschool envs
 ## pendula
 register(
