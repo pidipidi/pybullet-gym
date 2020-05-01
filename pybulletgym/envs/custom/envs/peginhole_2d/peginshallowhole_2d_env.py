@@ -1,11 +1,11 @@
 from pybulletgym.envs.roboschool.envs.env_bases import BaseBulletEnv
-from pybulletgym.envs.custom.robots.peg.cuboid_peg_2d import CuboidPeg2D
+from pybulletgym.envs.custom.robots.peg.cuboid_thin_peg_2d import CuboidPeg2D
 from pybulletgym.envs.roboschool.scenes.scene_bases import SingleRobotEmptyScene
 import numpy as np
 
 
 
-class CuboidPegInHole2DPyBulletEnv(BaseBulletEnv):
+class CuboidPegInShallowHole2DPyBulletEnv(BaseBulletEnv):
     def __init__(self):
         self.robot = CuboidPeg2D()
         BaseBulletEnv.__init__(self, self.robot)
@@ -50,12 +50,6 @@ class CuboidPegInHole2DPyBulletEnv(BaseBulletEnv):
             # work velocity_input*angular_velocity
             -0.001 * (np.abs(a[0] * state[1]) + np.abs(a[1] * state[3]) + np.abs(a[2] * state[5]))
         )
-        ## electricity_cost = (
-        ##     # work velocity_input*angular_velocity
-        ##     -0.05 * (np.abs(a[0] * state[1]) + np.abs(a[1] * state[3]) + np.abs(a[2] * state[5])) \
-        ##     - 0.01 * (np.abs(a[0]) + np.abs(a[1]) + np.abs(a[2]))  # stall torque require some energy
-        ## )
-        ## stuck_joint_cost = -0.1 if np.abs(np.abs(self.robot.gamma) - 1) < 0.01 else 0.0
 
         self.rewards = [float(self.potential - potential_old), float(electricity_cost)]
         self.HUD(state, a, done)
