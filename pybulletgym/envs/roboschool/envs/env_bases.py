@@ -55,6 +55,8 @@ class BaseBulletEnv(gym.Env):
 			self.physicsClientId = self._p._client
 			self._p.configureDebugVisualizer(pybullet.COV_ENABLE_GUI,0)
 
+        #from IPython import embed; embed(); sys.exit()
+        
 		if self.scene is None:
 			self.scene = self.create_single_player_scene(self._p)
 		if not self.scene.multiplayer and self.ownsPhysicsClient:

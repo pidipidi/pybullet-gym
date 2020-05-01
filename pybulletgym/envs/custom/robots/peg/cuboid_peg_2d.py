@@ -12,7 +12,7 @@ class CuboidPeg2D(URDFBasedRobot):
         self._p     = bullet_client
         self.target = self.parts["target"]
         self._p.setAdditionalSearchPath(pybullet_data.getDataPath())
-        self._p.setPhysicsEngineParameter(enableFileCaching=1)
+        self._p.setPhysicsEngineParameter(enableFileCaching=0)
         #self._p.setGravity(0, 0, -10)
 
         ## from IPython import embed; embed(); sys.exit()
@@ -43,6 +43,7 @@ class CuboidPeg2D(URDFBasedRobot):
         if not np.isfinite(a).all():
             print("a is inf")
             a[0] = 0; a[1] = 0; a[2] = 0
+            
         self.x_slider.set_velocity( float(np.clip(a[0], -self.jdict['x_slider'].jointMaxVelocity, self.jdict['x_slider'].jointMaxVelocity)) )
         self.y_slider.set_velocity( float(np.clip(a[1], -self.jdict['y_slider'].jointMaxVelocity, self.jdict['y_slider'].jointMaxVelocity)) )
         self.theta_joint.set_velocity( float(np.clip(a[2], -self.jdict['z_axis_joint'].jointMaxVelocity, self.jdict['z_axis_joint'].jointMaxVelocity)) )
