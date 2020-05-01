@@ -138,55 +138,55 @@
   </link>
 
 
-  <!-- <joint name="hole_left_joint" type="fixed"> -->
-  <!--   <parent link="world"/> -->
-  <!--   <child link="hole_left"/> -->
-  <!-- </joint> -->
-  <!-- <link name="hole_left"> -->
-  <!--   <visual> -->
-  <!--     <origin rpy="0 0 0" xyz="-0.28 -0.45  0.0"/> -->
-  <!--     <geometry> -->
-  <!--       <box size="0.44 0.1 0.053"/> -->
-  <!--     </geometry> -->
-  <!--     <material name="red"/>             -->
-  <!--   </visual> -->
-  <!--   <collision> -->
-  <!--     <origin rpy="0 0 0" xyz="-0.28 -0.45 0.0"/> -->
-  <!--     <geometry> -->
-  <!--       <box size="0.44 0.1 0.053"/> -->
-  <!--     </geometry> -->
-  <!--   </collision> -->
-  <!--   <inertial> -->
-  <!--     <origin rpy="0 0 0" xyz="0 0 0"/> -->
-  <!--     <mass value="1.0"/> -->
-  <!--     <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/> -->
-  <!--   </inertial>     -->
-  <!-- </link> -->
+  <joint name="hole_left_joint" type="fixed">
+    <parent link="world"/>
+    <child link="hole_left"/>
+  </joint>
+  <link name="hole_left">
+    <visual>
+      <origin rpy="0 0 0" xyz="-0.28 -0.45  0.0"/>
+      <geometry>
+        <box size="0.44 0.1 0.053"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="-0.28 -0.45 0.0"/>
+      <geometry>
+        <box size="0.44 0.1 0.053"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
 
-  <!-- <joint name="hole_right_joint" type="fixed"> -->
-  <!--   <parent link="world"/> -->
-  <!--   <child link="hole_right"/> -->
-  <!-- </joint> -->
-  <!-- <link name="hole_right"> -->
-  <!--   <visual> -->
-  <!--     <origin rpy="0 0 0" xyz="0.28 -0.45  0.0"/> -->
-  <!--     <geometry> -->
-  <!--       <box size="0.44 0.1 0.053"/> -->
-  <!--     </geometry> -->
-  <!--     <material name="red"/>             -->
-  <!--   </visual> -->
-  <!--   <collision> -->
-  <!--     <origin rpy="0 0 0" xyz="0.28 -0.45 0.0"/> -->
-  <!--     <geometry> -->
-  <!--       <box size="0.44 0.1 0.053"/> -->
-  <!--     </geometry> -->
-  <!--   </collision> -->
-  <!--   <inertial> -->
-  <!--     <origin rpy="0 0 0" xyz="0 0 0"/> -->
-  <!--     <mass value="1.0"/> -->
-  <!--     <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/> -->
-  <!--   </inertial>     -->
-  <!-- </link> -->
+  <joint name="hole_right_joint" type="fixed">
+    <parent link="world"/>
+    <child link="hole_right"/>
+  </joint>
+  <link name="hole_right">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.28 -0.45  0.0"/>
+      <geometry>
+        <box size="0.44 0.1 0.053"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.28 -0.45 0.0"/>
+      <geometry>
+        <box size="0.44 0.1 0.053"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
 
 
 

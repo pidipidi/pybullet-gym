@@ -15,7 +15,6 @@ class CuboidPeg2D(URDFBasedRobot):
         self._p.setPhysicsEngineParameter(enableFileCaching=1)
         #self._p.setGravity(0, 0, -10)
 
-
         ## from IPython import embed; embed(); sys.exit()
         self.plane = self._p.loadURDF("plane.urdf")
         full_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "assets", "urdf", "hole.urdf")
@@ -43,7 +42,7 @@ class CuboidPeg2D(URDFBasedRobot):
         assert( np.isfinite(a).all() )
         if not np.isfinite(a).all():
             print("a is inf")
-            a[0] = 0
+            a[0] = 0; a[1] = 0; a[2] = 0
         self.x_slider.set_velocity( float(np.clip(a[0], -self.jdict['x_slider'].jointMaxVelocity, self.jdict['x_slider'].jointMaxVelocity)) )
         self.y_slider.set_velocity( float(np.clip(a[1], -self.jdict['y_slider'].jointMaxVelocity, self.jdict['y_slider'].jointMaxVelocity)) )
         self.theta_joint.set_velocity( float(np.clip(a[2], -self.jdict['z_axis_joint'].jointMaxVelocity, self.jdict['z_axis_joint'].jointMaxVelocity)) )
@@ -79,4 +78,4 @@ class CuboidPeg2D(URDFBasedRobot):
 
 
     def calc_potential(self):
-        return -100 * (np.linalg.norm(self.to_target_vec) + abs(self.to_target_theta)*1.)
+        return -100 * ((np.linalg.norm(self.to_target_vec)) + (abs(self.to_target_theta)))**2
