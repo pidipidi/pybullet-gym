@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<robot name="cuboid_peg"
+       xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>
+  <material name="green">
+    <color rgba="0 1 0 1"/>
+  </material>
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material>
+  
+  <link name="world">
+    <inertial>
+      <origin rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1." ixy="0" ixz="0" iyy="1." iyz="0.0"
+               izz="1."/>
+    </inertial>
+  </link>
+
+  <joint name="peg_x_slider" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="world" />
+    <child link="peg_x_link" />
+    <axis xyz="1 0 0" />
+    <limit effort="10" velocity="0.01" />
+  </joint>
+  <link name="peg_x_link">
+    <inertial>
+      <origin rpy="0 0 0"/>
+      <mass value="0.00001"/>
+      <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
+               izz="28054E-9"/>
+    </inertial>
+  </link>
+
+  
+  <joint name="peg_y_slider" type="prismatic">
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+    <parent link="peg_x_link" />
+    <child link="peg_y_link" />
+    <axis xyz="0 1 0" />
+    <limit effort="10" velocity="0.01" />
+    <!--<dynamics damping="100.0" />-->
+  </joint>
+  <link name="peg_y_link">
+    <inertial>
+      <origin rpy="0 0 0"/>
+      <mass value="0.00001"/>
+      <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
+               izz="28054E-9"/>
+    </inertial>
+  </link>
+  
+  <joint name="peg_z_axis_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+    <parent link="peg_y_link" />
+    <child link="peg" />
+    <axis xyz="0 0 1" />
+    <limit effort="10" velocity="0.1" />
+    <!--<dynamics damping="100.0" />-->
+  </joint>
+  
+  <link name="peg">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <inertia_scaling value="3.0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="0.2"/>
+    </contact>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.02 0.05"/>
+      </geometry>
+      <material name="green"/>            
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.02 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
+               izz="28054E-9"/>
+    </inertial>
+  </link>
+
+  <!-- target -->
+  <!-- <joint name="target_joint" type="fixed"> -->
+  <!--   <parent link="world"/> -->
+  <!--   <child link="target"/> -->
+  <!--   <origin xyz="0 -0.2375 0" rpy="0.0 0.0 0.0"/> -->
+  <!-- </joint> -->
+  <!-- <link name="target"> -->
+  <!--   <visual> -->
+  <!--     <origin rpy="0 0 0" xyz="0 0 0"/> -->
+  <!--     <geometry> -->
+  <!--       <box size="0.1 0.02 0.05"/> -->
+  <!--     </geometry> -->
+  <!--     <material name="white"/>             -->
+  <!--   </visual> -->
+  <!--   <inertial> -->
+  <!--     <origin rpy="0 0 0"/> -->
+  <!--     <mass value="0.00001"/> -->
+  <!--     <inertia ixx="1." ixy="0" ixz="0" iyy="1." iyz="0.0" -->
+  <!--              izz="1."/> -->
+  <!--   </inertial> -->
+  <!-- </link> -->
+  
+</robot>
+

@@ -6,7 +6,7 @@ import pybullet_data
 class CuboidPeg2D(URDFBasedRobot):
 
     def __init__(self):
-        URDFBasedRobot.__init__(self, '../urdf/cuboid_thin_peg.urdf', 'cart', action_dim=3, obs_dim=9, basePosition=[0,0,0.025], fixed_base=True)
+        URDFBasedRobot.__init__(self, '../robots/peg/peg_description/cuboid_thin_peg.urdf', 'cart', action_dim=3, obs_dim=9, basePosition=[0,0,0.025], fixed_base=True)
 
     def robot_specific_reset(self, bullet_client):
         self._p     = bullet_client
@@ -17,7 +17,7 @@ class CuboidPeg2D(URDFBasedRobot):
 
         ## from IPython import embed; embed(); sys.exit()
         self.plane = self._p.loadURDF("plane.urdf")
-        full_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "assets", "urdf", "shallow_hole.urdf")
+        full_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "assets", "robots", "peg", "peg_description", "shallow_hole.urdf")
         self.arena = self._p.loadURDF(full_path, basePosition=[0,0,0.025], useFixedBase=True)
         
         self.x_slider    = self.jdict["x_slider"]

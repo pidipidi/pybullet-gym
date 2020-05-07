@@ -153,18 +153,19 @@ class URDFBasedRobot(XmlBasedRobot):
         if self.doneLoading == 0:
             self.doneLoading=1
             if self.self_collision:
-                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
-                    self._p.loadURDF(full_path,
-                    basePosition=self.basePosition,
-                    baseOrientation=self.baseOrientation,
-                    useFixedBase=self.fixed_base,
-                    flags=pybullet.URDF_USE_SELF_COLLISION))
+                self.objects = self._p.loadURDF(full_path,
+                                                basePosition=self.basePosition,
+                                                baseOrientation=self.baseOrientation,
+                                                useFixedBase=self.fixed_base,
+                                                flags=pybullet.URDF_USE_SELF_COLLISION)
+                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p, self.objects)
             else:
-                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p,
-                    self._p.loadURDF(full_path,
-                    basePosition=self.basePosition,
-                    baseOrientation=self.baseOrientation,
-                    useFixedBase=self.fixed_base))
+                self.objects = self._p.loadURDF(full_path,
+                                                basePosition=self.basePosition,
+                                                baseOrientation=self.baseOrientation,
+                                                useFixedBase=self.fixed_base,
+                                                flags=pybullet.URDF_USE_INERTIA_FROM_FILE)
+                self.parts, self.jdict, self.ordered_joints, self.robot_body = self.addToScene(self._p, self.objects)
 
         self.robot_specific_reset(self._p)
 
@@ -345,8 +346,11 @@ class Joint:
 		_, vx = self.get_state()
 		return vx
 
-	def set_position(self, position):
-		self._p.setJointMotorControl2(self.bodies[self.bodyIndex], self.jointIndex, pybullet.POSITION_CONTROL, targetPosition=position)
+	def set_position(self, position, positionGain=0.3, velocityGain=1., force=200., maxVelocity=0.35):
+		self._p.setJointMotorControl2(self.bodies[self.bodyIndex], self.jointIndex, pybullet.POSITION_CONTROL, targetPosition=position,
+                                      targetVelocity=0,
+                                      positionGain=positionGain, velocityGain=velocityGain, force=force,
+                                      maxVelocity=maxVelocity)
 
 	def set_velocity(self, velocity):
 		self._p.setJointMotorControl2(self.bodies[self.bodyIndex], self.jointIndex, pybullet.VELOCITY_CONTROL, targetVelocity=velocity)

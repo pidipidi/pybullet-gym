@@ -62,17 +62,19 @@ class World:
 		self.gravity = gravity
 		self.timestep = timestep
 		self.frame_skip = frame_skip
-		self.numSolverIterations = 5
+		self.numSolverIterations = 150 #5
 		self.clean_everything()
+		self.actionRepeat = 80
 
 	def clean_everything(self):
 		#p.resetSimulation()
 		self._p.setGravity(0, 0, -self.gravity)
-		self._p.setDefaultContactERP(0.9)
+		#self._p.setDefaultContactERP(0.9)
 		#print("self.numSolverIterations=",self.numSolverIterations)
-		self._p.setPhysicsEngineParameter(fixedTimeStep=self.timestep*self.frame_skip, numSolverIterations=self.numSolverIterations, numSubSteps=self.frame_skip)
+		self._p.setPhysicsEngineParameter(fixedTimeStep=self.timestep*self.frame_skip, numSolverIterations=self.numSolverIterations, numSubSteps=self.frame_skip, useSplitImpulse=1)
 
 	def step(self, frame_skip):
-		self._p.stepSimulation()
+		for _ in range(self.actionRepeat):
+			self._p.stepSimulation()
 
 

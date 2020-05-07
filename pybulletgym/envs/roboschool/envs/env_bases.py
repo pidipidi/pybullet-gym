@@ -26,7 +26,7 @@ class BaseBulletEnv(gym.Env):
 		self.isRender = render
 		self.robot = robot
 		self._seed()
-		self._cam_dist = 3
+		self._cam_dist = 1
 		self._cam_yaw = 0
 		self._cam_pitch = -30
 		self._render_width = 320
@@ -55,12 +55,11 @@ class BaseBulletEnv(gym.Env):
 			self.physicsClientId = self._p._client
 			self._p.configureDebugVisualizer(pybullet.COV_ENABLE_GUI,0)
 
-        #from IPython import embed; embed(); sys.exit()
-        
+		## self._p.resetSimulation()
 		if self.scene is None:
 			self.scene = self.create_single_player_scene(self._p)
 		if not self.scene.multiplayer and self.ownsPhysicsClient:
-			self.scene.episode_restart(self._p)
+			self.scene.episode_restart(self._p, self.robot)
 
 		self.robot.scene = self.scene
 

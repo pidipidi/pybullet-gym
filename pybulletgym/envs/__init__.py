@@ -16,6 +16,13 @@ register(
 	reward_threshold=20.0,
 	)
 
+register(
+	id='GripperPegInHole2DPyBulletEnv-v0',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_peginhole_2d_env:GripperPegInHole2DPyBulletEnv',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
 
 # roboschool envs
 ## pendula
