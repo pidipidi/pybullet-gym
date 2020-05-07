@@ -64,10 +64,10 @@ class Gripper2D(URDFBasedRobot):
         pos = self.peg.pose().xyz()
         rpy = self.peg.pose().rpy()
         self.theta_joint.reset_current_position( rpy[2] , 0)
-        self.x_slider.reset_current_position( pos[0]+0.035*np.cos(rpy[2]) , 0)
+        self.x_slider.reset_current_position( pos[0]+0.045*np.cos(rpy[2]) , 0)
         ## u = self.np_random.uniform(low=self.observation_space.low[2]*0.8,
         ##                            high=self.observation_space.high[2]*0.8)
-        self.y_slider.reset_current_position( pos[1]+0.035*np.sin(rpy[2]) , 0)
+        self.y_slider.reset_current_position( pos[1]+0.045*np.sin(rpy[2]) , 0)
         ## u = self.np_random.uniform(low=self.observation_space.low[4],
         ##                            high=self.observation_space.high[4])
 
