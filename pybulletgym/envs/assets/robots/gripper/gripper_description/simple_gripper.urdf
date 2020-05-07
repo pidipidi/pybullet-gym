@@ -93,14 +93,14 @@
   </joint>  
   <link name="left_knuckle">
     <visual>
-      <origin rpy="0 0 0" xyz="0.01 0.01 0"/>
+      <origin rpy="0 0 0" xyz="0.015 0.01 0.0"/>
       <geometry>
         <box size="0.01 0.02 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.01 0.01 0"/>
+      <origin rpy="0 0 0" xyz="0.015 0.01 0.0"/>
       <geometry>
         <box size="0.01 0.02 0.05"/>
       </geometry>
@@ -139,14 +139,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.01 0.01 0.05"/>
+        <box size="0.02 0.01 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.01 0.01 0.05"/>
+        <box size="0.02 0.01 0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -166,14 +166,14 @@
   </joint>  
   <link name="right_knuckle">
     <visual>
-      <origin rpy="0 0 0" xyz="0.01 -0.01 0"/>
+      <origin rpy="0 0 0" xyz="0.015 -0.01 0.0"/>
       <geometry>
         <box size="0.01 0.02 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.01 -0.01 0"/>
+      <origin rpy="0 0 0" xyz="0.015 -0.01 0.0"/>
       <geometry>
         <box size="0.01 0.02 0.05"/>
       </geometry>
@@ -209,14 +209,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.01 0.01 0.05"/>
+        <box size="0.02 0.01 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.01 0.01 0.05"/>
+        <box size="0.02 0.01 0.05"/>
       </geometry>
     </collision>
     <inertial>
