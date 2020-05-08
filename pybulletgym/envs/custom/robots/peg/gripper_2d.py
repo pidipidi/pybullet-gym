@@ -3,6 +3,7 @@ import numpy as np
 import os
 import pybullet_data, pybullet
 import gym, gym.spaces, gym.utils
+import time
 
 class Gripper2D(URDFBasedRobot):
 
@@ -15,7 +16,7 @@ class Gripper2D(URDFBasedRobot):
         self._p.setPhysicsEngineParameter(enableFileCaching=0)
         self._p.setPhysicsEngineParameter(numSolverIterations=150)
         #self._p.setPhysicsEngineParameter(solverResidualThreshold=0)
-        self._p.setTimeStep(1./240.)
+        #self._p.setTimeStep(1./240.)
         #self._p.setGravity(0, 0, -10)
 
         ## for i in range(self._p.getNumJoints(self.objects)):
@@ -58,19 +59,21 @@ class Gripper2D(URDFBasedRobot):
         self.observation_space.low[6] = low[3]
 
 
+        p = 0.04
+        self.x_slider.reset_current_position(1., 0)
+        self.left_finger_joint.reset_current_position( p , 0)
+        self.right_finger_joint.reset_current_position( p , 0)
+        self.scene.global_step(False)
+
+
         # set pos wrt to the peg
         ## u = self.np_random.uniform(low=self.observation_space.low[0]*0.8,
         ##                            high=self.observation_space.high[0]*0.8)
         pos = self.peg.pose().xyz()
         rpy = self.peg.pose().rpy()
         self.theta_joint.reset_current_position( rpy[2] , 0)
-        self.x_slider.reset_current_position( pos[0]+0.04*np.cos(rpy[2]) , 0)
-        ## u = self.np_random.uniform(low=self.observation_space.low[2]*0.8,
-        ##                            high=self.observation_space.high[2]*0.8)
-        self.y_slider.reset_current_position( pos[1]+0.04*np.sin(rpy[2]) , 0)
-        ## u = self.np_random.uniform(low=self.observation_space.low[4],
-        ##                            high=self.observation_space.high[4])
-
+        self.x_slider.reset_current_position( pos[0]+0.041*np.cos(rpy[2]) , 0)
+        self.y_slider.reset_current_position( pos[1]+0.041*np.sin(rpy[2]) , 0)
         ## self.left_finger_joint.set_torque( -15 )
         ## self.right_finger_joint.set_torque( -15 )
         
@@ -79,15 +82,20 @@ class Gripper2D(URDFBasedRobot):
         self.theta_joint.set_velocity(0)
         self.left_finger_joint.set_velocity(0)
         self.right_finger_joint.set_velocity(0)
-        self.scene.global_step()
+        self.scene.global_step(False)
         
-        p = 0.005
-        self.left_finger_joint.set_position( p, force=3 )
-        self.right_finger_joint.set_position( p, force=3 )
-        ## self.left_finger_joint.reset_current_position( 0.005 , 0)
-        ## self.right_finger_joint.reset_current_position( 0.005 , 0)
-        
-        self.scene.global_step()
+        ## self.left_finger_joint.set_position( p, force=0.5, maxVelocity=0.0051 )
+        ## self.right_finger_joint.set_position( p, force=0.5, maxVelocity=0.0051 )
+        #print( "aaaaaaaaaaaaa")
+        ## self.scene.global_step(False)
+        p = 0.01 #25
+        self.left_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
+        self.right_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
+        self.scene.global_step(False)
+        #print (self._p.getPhysicsEngineParameters())
+        ## print( "==============================")
+        ## self.scene.global_step(False)
+        #from IPython import embed; embed(); sys.exit()
 
 
     def apply_action(self, a):
@@ -101,32 +109,35 @@ class Gripper2D(URDFBasedRobot):
         p = float(np.clip(p+self.x,
                           self.observation_space.low[0],
                           self.observation_space.high[0]))
-        self.x_slider.set_position( p , positionGain=0.1)
+        self.x_slider.set_position( p , positionGain=0.1, force=3.)
 
         p = np.clip(a[1], self.action_space.low[1], self.action_space.high[1])
         p = float(np.clip(p+self.y,
                           self.observation_space.low[2],
                           self.observation_space.high[2]))
-        self.y_slider.set_position( p , positionGain=0.1)
+        self.y_slider.set_position( p , positionGain=0.1, force=3.)
 
         p = np.clip(a[2], self.action_space.low[2], self.action_space.high[2])
         p = float(np.clip(p+self.theta,
                           self.observation_space.low[4],
                           self.observation_space.high[4]))
-        self.theta_joint.set_position( p , positionGain=0.1)
+        self.theta_joint.set_position( p , positionGain=0.1, force=3.)
 
         p = float(np.clip(a[3],
                           self.observation_space.low[6],
                           self.observation_space.high[6]))
-        ## p = 0.005
-        self.left_finger_joint.set_position( p, force=5 )
-        self.right_finger_joint.set_position( p, force=5 )
+        p = 0.0245
+        ## print (p)
+        #self.left_finger_joint.set_position( p, positionGain=0.5, force=1.1, maxVelocity=0.5 )
+        #self.right_finger_joint.set_position( p, positionGain=0.5, force=1.1, maxVelocity=0.5 )
         ## if p<0.01:
-        ##     self.left_finger_joint.set_torque( -15 )
-        ##     self.right_finger_joint.set_torque( -15 )
+        ##     self.left_finger_joint.set_torque( -500 )
+        ##     self.right_finger_joint.set_torque( -500 )
         ## else:
-        ##     self.left_finger_joint.set_torque( 15 )
-        ##     self.right_finger_joint.set_torque( 15 )
+        ##     self.left_finger_joint.set_position( p, force=200., maxVelocity=1.5 )
+        ##     self.right_finger_joint.set_position( p, force=200., maxVelocity=1.5 )
+        ##     #self.left_finger_joint.set_torque( 15 )
+        ##     #self.right_finger_joint.set_torque( 15 )
             
 
         #temp
@@ -137,10 +148,10 @@ class Gripper2D(URDFBasedRobot):
         ## self.right_finger_joint.set_velocity( 0 )
 
     def calc_state(self):
-        self.x, x_dot = self.x_slider.current_position()
-        self.y, y_dot = self.y_slider.current_position()
-        self.theta, theta_dot = self.theta_joint.current_position()
-        self.l_finger, l_finger_dot = self.left_finger_joint.current_position()
+        self.x, self.x_dot = self.x_slider.current_position()
+        self.y, self.y_dot = self.y_slider.current_position()
+        self.theta, self.theta_dot = self.theta_joint.current_position()
+        self.l_finger, self.l_finger_dot = self.left_finger_joint.current_position()
         assert( np.isfinite(self.x) )
         assert( np.isfinite(self.y) )
         assert( np.isfinite(self.theta) )
@@ -150,23 +161,23 @@ class Gripper2D(URDFBasedRobot):
             print("x,y,theta are inf")
             self.x = 0; self.y=0; self.theta=0; self.l_finger=0
 
-        if not np.isfinite(x_dot):
+        if not np.isfinite(self.x_dot):
             print("x_dot is inf")
-            x_dot = 0
-        if not np.isfinite(y_dot):
+            self.x_dot = 0
+        if not np.isfinite(self.y_dot):
             print("y_dot is inf")
-            y_dot = 0
-        if not np.isfinite(theta_dot):
+            self.y_dot = 0
+        if not np.isfinite(self.theta_dot):
             print("theta_dot is inf")
-            theta_dot = 0
-        if not np.isfinite(l_finger_dot):
+            self.theta_dot = 0
+        if not np.isfinite(self.l_finger_dot):
             print("l_finger_dot is inf")
-            l_finger_dot = 0
+            self.l_finger_dot = 0
        
         self.to_target_vec = self.peg.current_position() - np.array(self.target.pose().xyz())
 
         return np.array([
-            self.x, x_dot, self.y, y_dot, self.theta, theta_dot, self.l_finger, l_finger_dot, self.to_target_vec[0], self.to_target_vec[1], self.to_target_vec[2] 
+            self.x, self.x_dot, self.y, self.y_dot, self.theta, self.theta_dot, self.l_finger, self.l_finger_dot, self.to_target_vec[0], self.to_target_vec[1], self.to_target_vec[2] 
         ])
 
 

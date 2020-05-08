@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, time
 sys.path.append(os.path.dirname(__file__))
 import pybullet as p
 
@@ -44,12 +44,12 @@ class Scene:
         self.cpp_world.clean_everything()
         #self.cpp_world.test_window_history_reset()
 
-    def global_step(self):
+    def global_step(self, sleep=False):
         """
         The idea is: apply motor torques for all robots, then call global_step(), then collect
         observations from robots using step() with the same action.
         """
-        self.cpp_world.step(self.frame_skip)
+        self.cpp_world.step(self.frame_skip, sleep)
 
 class SingleRobotEmptyScene(Scene):
     multiplayer = False  # this class is used "as is" for InvertedPendulum, Reacher
@@ -71,10 +71,15 @@ class World:
 		self._p.setGravity(0, 0, -self.gravity)
 		#self._p.setDefaultContactERP(0.9)
 		#print("self.numSolverIterations=",self.numSolverIterations)
-		self._p.setPhysicsEngineParameter(fixedTimeStep=self.timestep*self.frame_skip, numSolverIterations=self.numSolverIterations, numSubSteps=self.frame_skip, useSplitImpulse=1)
+		self._p.setPhysicsEngineParameter(fixedTimeStep=self.timestep*self.frame_skip,
+                                          numSolverIterations=self.numSolverIterations,
+                                          numSubSteps=self.frame_skip,
+                                          useSplitImpulse=1)
+		## print (self._p.getPhysicsEngineParameters())        
 
-	def step(self, frame_skip):
+	def step(self, frame_skip, sleep=False):
 		for _ in range(self.actionRepeat):
+			if sleep is True: time.sleep(0.05)
 			self._p.stepSimulation()
 
 

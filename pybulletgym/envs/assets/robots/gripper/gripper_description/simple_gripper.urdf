@@ -33,7 +33,7 @@
     <child link="x_axis_link" />
     <axis xyz="1 0 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.01" />
+           velocity="0.001" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="x_axis_link">
@@ -52,7 +52,7 @@
     <child link="y_axis_link" />
     <axis xyz="0 1 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.01" />
+           velocity="0.001" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="y_axis_link">
@@ -70,12 +70,35 @@
     <child link="palm" />
     <axis xyz="0 0 1" />
     <limit effort="1000" lower="-3.14" upper="3.14"
-           velocity="0.5" />
+           velocity="0.05" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   
   <link name="palm">
-    <inertial>
+    <contact>
+      <lateral_friction value="0.8"/>
+      <rolling_friction value="0"/>
+      <spinning_friction value="0"/>
+      <!-- <contact_cfm value="0.0"/> -->
+      <!-- <contact_erp value="0.8"/> -->
+      <!-- <inertia_scaling value="0.1"/> -->
+      <!-- <stiffness value="10000"/> -->
+      <!-- <damping value="0.1"/> -->
+    </contact>
+    <visual>
+      <origin rpy="0 0 0" xyz="0.015 0.0 0.0"/>
+      <geometry>
+        <box size="0.005 0.04 0.05"/>
+      </geometry>
+      <material name="red"/>            
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.015 0.012 0.0"/>
+      <geometry>
+        <box size="0.005 0.04 0.05"/>
+      </geometry>
+    </collision>
+     <inertial>
       <origin rpy="0 0 0"/>
       <mass value="10.0001"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
@@ -85,68 +108,58 @@
 
 
 
-  <!--left finger-->
-  <joint name="left_link_joint" type="fixed">
-    <origin xyz="0 0.005 0" rpy="0.0 0.0 0.0"/>
+  <!--right finger-->
+  <joint name="right_link_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
     <parent link="palm" />
-    <child link="left_knuckle" />
+    <child link="right_knuckle" />
   </joint>  
-  <link name="left_knuckle">
-    <visual>
-      <origin rpy="0 0 0" xyz="0.015 0.01 0.0"/>
-      <geometry>
-        <box size="0.01 0.02 0.05"/>
-      </geometry>
-      <material name="red"/>            
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0.015 0.01 0.0"/>
-      <geometry>
-        <box size="0.01 0.02 0.05"/>
-      </geometry>
-    </collision>
+  <link name="right_knuckle">
     <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="0.5"/>
+      <mass value="0.001"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>
   </link> 
-  <joint name="left_finger_joint" type="prismatic">
-    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
-    <parent link="left_knuckle" />
-    <child link="left_finger" />
+  <joint name="right_finger_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="right_knuckle" />
+    <child link="right_finger" />
     <axis xyz="0 1 0" >
       <dynamics>
-        <damping>0</damping>
-        <friction>0</friction>
-        <spring_reference>0</spring_reference>
-        <spring_stiffness>0</spring_stiffness>
+        <!-- <damping>0</damping> -->
+        <!-- <friction>0</friction> -->
+        <!-- <spring_reference>0</spring_reference> -->
+        <!-- <spring_stiffness>0</spring_stiffness> -->
       </dynamics>
     </axis>      
-    <limit effort="0" lower="0.005" upper="0.03"
+    <limit effort="1000" lower="0.0" upper="0.04"
            velocity="0" />
   </joint>  
-  <link name="left_finger">
+  <link name="right_finger">
     <contact>
-      <lateral_friction value="0.8"/>
+      <friction_anchor/>
+      <lateral_friction value="1."/>
       <rolling_friction value="0"/>
-      <spinning_friction value="0.1"/>
+      <spinning_friction value="0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="0.8"/>
       <!-- <inertia_scaling value="0.1"/> -->
-      <!-- <stiffness value="100"/> -->
+      <!-- <stiffness value="10000"/> -->
       <!-- <damping value="0.1"/> -->
     </contact>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.01 0.05"/>
+        <box size="0.02 0.005 0.05"/>
       </geometry>
-      <material name="red"/>            
+      <material name="blue"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.01 0.05"/>
+        <box size="0.02 0.005 0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -158,65 +171,55 @@
   </link>
 
 
-  <!--right finger-->
-  <joint name="right_link_joint" type="fixed">
-    <origin xyz="0 -0.005 0" rpy="0.0 0.0 0.0"/>
+  <!--left finger-->
+  <joint name="left_link_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="palm" />
-    <child link="right_knuckle" />
+    <child link="left_knuckle" />
   </joint>  
-  <link name="right_knuckle">
-    <visual>
-      <origin rpy="0 0 0" xyz="0.015 -0.01 0.0"/>
-      <geometry>
-        <box size="0.01 0.02 0.05"/>
-      </geometry>
-      <material name="red"/>            
-    </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0.015 -0.01 0.0"/>
-      <geometry>
-        <box size="0.01 0.02 0.05"/>
-      </geometry>
-    </collision>
+  <link name="left_knuckle">
     <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="0.5"/>
+      <mass value="0.001"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>
   </link> 
-  <joint name="right_finger_joint" type="prismatic">
-    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
-    <parent link="right_knuckle" />
-    <child link="right_finger" />
+  <joint name="left_finger_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="left_knuckle" />
+    <child link="left_finger" />
     <axis xyz="0 -1 0">
       <dynamics>
-        <damping>0</damping>
-        <friction>0</friction>
-        <spring_reference>0</spring_reference>
-        <spring_stiffness>0</spring_stiffness>
+        <!-- <damping>0</damping> -->
+        <!-- <friction>0</friction> -->
+        <!-- <spring_reference>0</spring_reference> -->
+        <!-- <spring_stiffness>0</spring_stiffness> -->
       </dynamics>
     </axis>
-    <limit effort="0" lower="0.005" upper="0.03"
+    <limit effort="2" lower="0.0" upper="0.04"
            velocity="0" />
   </joint>  
-  <link name="right_finger">
+  <link name="left_finger">
     <contact>
-      <lateral_friction value="0.8"/>
+      <friction_anchor/>
+      <lateral_friction value="1."/>
       <rolling_friction value="0"/>
-      <spinning_friction value="0.1"/>
+      <spinning_friction value="0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="0.8"/>
     </contact>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.01 0.05"/>
+        <box size="0.02 0.005 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.01 0.05"/>
+        <box size="0.02 0.005 0.05"/>
       </geometry>
     </collision>
     <inertial>

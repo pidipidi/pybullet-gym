@@ -13,9 +13,10 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         ## self.render(mode='human')
 
     def create_single_player_scene(self, bullet_client):
+        #self.robot.jdict['x_slider'].reset_current_position(1. , 0.)
+
         # peg in shallow hole scene
-        timestep = 1./240.
-        #timestep = 0.0165
+        timestep = 1./1000. #1./240.
         scene = PegInShallowHoleScene(bullet_client, gravity=9.8, timestep=timestep, frame_skip=1)
         scene.episode_restart(self._p)
         self.robot.parts, self.robot.jdict, self.robot.ordered_joints, self.robot.robot_body = self.robot.addToScene(self._p, scene.stadium)
@@ -30,6 +31,7 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         self.action_space = self.robot.action_space
         self.observation_space = self.robot.observation_space
         ## from IPython import embed; embed(); sys.exit()
+        #self.render(mode='human')
 
         return r
 
@@ -40,15 +42,7 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         
         # x,xd,y,yd,theta,thetad,to_target_vec
         state = self.robot.calc_state()
-
-        # if peg is not hold by the gripper
-        p = self.robot.peg.pose().xyz()
-        d_gripper_peg = np.linalg.norm([p[0]-state[0], p[1]-state[2]])
-        if d_gripper_peg > 0.1:
-            done = True
-        else:
-            #done = abs(state[-3])<0.01 and abs(state[-2])<0.01 and abs(state[-1])<0.15
-            done = False
+        done  = self.terminate(state)
 
         potential_old = self.potential
         self.potential = self.robot.calc_potential()
@@ -62,6 +56,29 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         self.HUD(state, a, done)
         return state, sum(self.rewards), done, {}
 
+    def terminate(self, state):
+        # if peg is not hold by the gripper
+        p = self.robot.peg.pose().xyz()
+        v = np.array([state[0], state[2]]) - p[:2]
+        d_gripper_peg = np.linalg.norm(v)
+        if d_gripper_peg > 0.07:            
+            done = True
+        else:
+            #done = abs(state[-3])<0.01 and abs(state[-2])<0.01 and abs(state[-1])<0.15
+            done = False
+
+        orn = self.robot.peg.pose().rpy()
+        ## peg_v = np.array([np.cos(orn[2]), np.sin(orn[2])])
+        peg_n = np.array([np.cos(orn[2]+np.pi/2.), np.sin(orn[2]+np.pi/2.)])
+
+        if abs(np.sum(v*peg_n)) > 0.02:
+            done = False
+
+        
+            
+        
+        return done
+
     def camera_adjust(self):
-        self.camera.move_and_look_at(0, 1.2, 1.0, 0, 0, 0.5)
+        self.camera.move_and_look_at(0, 1.2, 1.0, 0, -0.05, 0.5)
 
