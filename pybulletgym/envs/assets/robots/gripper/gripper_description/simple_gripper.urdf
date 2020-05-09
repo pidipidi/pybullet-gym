@@ -33,7 +33,7 @@
     <child link="x_axis_link" />
     <axis xyz="1 0 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.001" />
+           velocity="0.005" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="x_axis_link">
@@ -52,7 +52,7 @@
     <child link="y_axis_link" />
     <axis xyz="0 1 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.001" />
+           velocity="0.005" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="y_axis_link">
@@ -70,15 +70,16 @@
     <child link="palm" />
     <axis xyz="0 0 1" />
     <limit effort="1000" lower="-3.14" upper="3.14"
-           velocity="0.05" />
+           velocity="0.08" />
     <!--<dynamics damping="100.0" />-->
-  </joint>
-  
+  </joint>  
   <link name="palm">
     <contact>
       <lateral_friction value="0.8"/>
       <rolling_friction value="0"/>
       <spinning_friction value="0"/>
+      <contact_cfm value="0.0"/>
+      <contact_erp value="0.8"/>
       <!-- <contact_cfm value="0.0"/> -->
       <!-- <contact_erp value="0.8"/> -->
       <!-- <inertia_scaling value="0.1"/> -->
@@ -86,16 +87,16 @@
       <!-- <damping value="0.1"/> -->
     </contact>
     <visual>
-      <origin rpy="0 0 0" xyz="0.015 0.0 0.0"/>
+      <origin rpy="0 0 0" xyz="0.025 0.0 0.0"/>
       <geometry>
-        <box size="0.005 0.04 0.05"/>
+        <box size="0.025 0.04 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.015 0.012 0.0"/>
+      <origin rpy="0 0 0" xyz="0.025 0.0 0.0"/>
       <geometry>
-        <box size="0.005 0.04 0.05"/>
+        <box size="0.025 0.04 0.05"/>
       </geometry>
     </collision>
      <inertial>
@@ -152,14 +153,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.005 0.05"/>
+        <box size="0.03 0.005 0.05"/>
       </geometry>
       <material name="blue"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.005 0.05"/>
+        <box size="0.03 0.005 0.05"/>
       </geometry>
     </collision>
     <inertial>
@@ -197,7 +198,7 @@
         <!-- <spring_stiffness>0</spring_stiffness> -->
       </dynamics>
     </axis>
-    <limit effort="2" lower="0.0" upper="0.04"
+    <limit effort="2" lower="0.01" upper="0.04"
            velocity="0" />
   </joint>  
   <link name="left_finger">
@@ -212,14 +213,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.005 0.05"/>
+        <box size="0.03 0.005 0.05"/>
       </geometry>
       <material name="red"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="0.02 0.005 0.05"/>
+        <box size="0.03 0.005 0.05"/>
       </geometry>
     </collision>
     <inertial>

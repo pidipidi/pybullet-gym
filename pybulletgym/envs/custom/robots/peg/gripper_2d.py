@@ -8,8 +8,8 @@ import time
 class Gripper2D(URDFBasedRobot):
 
     def __init__(self):
-        URDFBasedRobot.__init__(self, '../robots/gripper/gripper_description/simple_gripper.urdf', 'cart', action_dim=4, obs_dim=11, basePosition=[0,0,0.025], fixed_base=True, self_collision=True)
-
+        URDFBasedRobot.__init__(self, '../robots/gripper/gripper_description/simple_gripper.urdf', 'cart', action_dim=4, obs_dim=4, basePosition=[0,0,0.025], fixed_base=True, self_collision=False)
+        
     def robot_specific_reset(self, bullet_client):
         self._p     = bullet_client
         self._p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -41,22 +41,22 @@ class Gripper2D(URDFBasedRobot):
                 self.jdict['left_finger_joint'].jointMaxVelocity]
         self.action_space = gym.spaces.Box(-np.array(high), np.array(high))
 
-        high = [self.jdict['x_slider'].upperLimit,
-                self.jdict['y_slider'].upperLimit,
-                self.jdict['z_axis_joint'].upperLimit,
-                self.jdict['left_finger_joint'].upperLimit]
-        low = [self.jdict['x_slider'].lowerLimit,
-               self.jdict['y_slider'].lowerLimit,
-               self.jdict['z_axis_joint'].lowerLimit,
-               self.jdict['left_finger_joint'].lowerLimit]
-        self.observation_space.high[0] = high[0]
-        self.observation_space.high[2] = high[1]
-        self.observation_space.high[4] = high[2]
-        self.observation_space.high[6] = high[3]
-        self.observation_space.low[0] = low[0]
-        self.observation_space.low[2] = low[1]
-        self.observation_space.low[4] = low[2]
-        self.observation_space.low[6] = low[3]
+        ## high = [self.jdict['x_slider'].upperLimit,
+        ##         self.jdict['y_slider'].upperLimit,
+        ##         self.jdict['z_axis_joint'].upperLimit,
+        ##         self.jdict['left_finger_joint'].upperLimit]
+        ## low = [self.jdict['x_slider'].lowerLimit,
+        ##        self.jdict['y_slider'].lowerLimit,
+        ##        self.jdict['z_axis_joint'].lowerLimit,
+        ##        self.jdict['left_finger_joint'].lowerLimit]
+        ## self.observation_space.high[0] = high[0]
+        ## self.observation_space.high[2] = high[1]
+        ## self.observation_space.high[4] = high[2]
+        ## self.observation_space.high[6] = high[3]
+        ## self.observation_space.low[0] = low[0]
+        ## self.observation_space.low[2] = low[1]
+        ## self.observation_space.low[4] = low[2]
+        ## self.observation_space.low[6] = low[3]
 
 
         p = 0.04
@@ -107,29 +107,29 @@ class Gripper2D(URDFBasedRobot):
 
         p = np.clip(a[0], self.action_space.low[0], self.action_space.high[0])
         p = float(np.clip(p+self.x,
-                          self.observation_space.low[0],
-                          self.observation_space.high[0]))
-        self.x_slider.set_position( p , positionGain=0.1, force=3.)
+                          self.jdict['x_slider'].lowerLimit,
+                          self.jdict['x_slider'].upperLimit))
+        self.x_slider.set_position( p , positionGain=0.1, force=2.)
 
         p = np.clip(a[1], self.action_space.low[1], self.action_space.high[1])
         p = float(np.clip(p+self.y,
-                          self.observation_space.low[2],
-                          self.observation_space.high[2]))
-        self.y_slider.set_position( p , positionGain=0.1, force=3.)
+                          self.jdict['y_slider'].lowerLimit,
+                          self.jdict['y_slider'].upperLimit))
+        self.y_slider.set_position( p , positionGain=0.1, force=1.)
 
         p = np.clip(a[2], self.action_space.low[2], self.action_space.high[2])
         p = float(np.clip(p+self.theta,
-                          self.observation_space.low[4],
-                          self.observation_space.high[4]))
-        self.theta_joint.set_position( p , positionGain=0.1, force=3.)
+                          self.jdict['z_axis_joint'].lowerLimit,
+                          self.jdict['z_axis_joint'].upperLimit))
+        self.theta_joint.set_position( p , positionGain=0.1, force=2.)
 
         p = float(np.clip(a[3],
-                          self.observation_space.low[6],
-                          self.observation_space.high[6]))
-        p = 0.0245
+                          self.jdict['left_finger_joint'].lowerLimit,
+                          self.jdict['left_finger_joint'].upperLimit))
+        ## p = 0.0245
         ## print (p)
-        #self.left_finger_joint.set_position( p, positionGain=0.5, force=1.1, maxVelocity=0.5 )
-        #self.right_finger_joint.set_position( p, positionGain=0.5, force=1.1, maxVelocity=0.5 )
+        self.left_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
+        self.right_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
         ## if p<0.01:
         ##     self.left_finger_joint.set_torque( -500 )
         ##     self.right_finger_joint.set_torque( -500 )
@@ -173,15 +173,25 @@ class Gripper2D(URDFBasedRobot):
         if not np.isfinite(self.l_finger_dot):
             print("l_finger_dot is inf")
             self.l_finger_dot = 0
-       
-        self.to_target_vec = self.peg.current_position() - np.array(self.target.pose().xyz())
+
+        pos = self.peg.current_position()[:2] - np.array(self.target.pose().xyz())[:2]
+        ## self.to_target_vec[:2] /= 0.25
+        ang = pybullet.getEulerFromQuaternion(self.peg.current_orientation())[2] - self.target.pose().rpy()[2]
+        self.to_target_vec = np.array([pos[0], pos[1], ang/np.pi])
+        ## print (self.peg.current_position()[:2] - np.array(self.target.pose().xyz())[:2], self.to_target_vec)            
+        ## print (pybullet.getEulerFromQuaternion(self.peg.current_orientation()), self.peg.current_orientation())
+        ## self.to_target_vec[2] = min([ang, ang+np.pi, ang-np.pi])
 
         return np.array([
-            self.x, self.x_dot, self.y, self.y_dot, self.theta, self.theta_dot, self.l_finger, self.l_finger_dot, self.to_target_vec[0], self.to_target_vec[1], self.to_target_vec[2] 
+            self.l_finger, self.to_target_vec[0], self.to_target_vec[1], self.to_target_vec[2] 
         ])
+        ## return np.array([
+        ##     self.x, self.x_dot, self.y, self.y_dot, self.theta, self.theta_dot, self.l_finger, self.l_finger_dot,
+        ##     self.to_target_vec[0], self.to_target_vec[1], self.to_target_vec[2] 
+        ## ])
 
 
     def calc_potential(self):
-        return -100 * (np.linalg.norm(self.to_target_vec[:2]) + abs(self.to_target_vec[-1]))**2
+        return -100. * ( np.sum(self.to_target_vec[:2]**2) + 0.01*abs(self.to_target_vec[-1]) )
 
     

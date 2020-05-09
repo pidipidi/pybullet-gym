@@ -42,24 +42,24 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         
         # x,xd,y,yd,theta,thetad,to_target_vec
         state = self.robot.calc_state()
-        done  = self.terminate(state)
+        done  = self.terminate()
 
         potential_old = self.potential
         self.potential = self.robot.calc_potential()
 
         electricity_cost = (
             # work velocity_input*angular_velocity
-            -0.001 * (np.abs(a[0] * state[1]) + np.abs(a[1] * state[3]) + np.abs(a[2] * state[5]))
+            -0.001 * (np.abs(a[0] * self.robot.x) + np.abs(a[1] * self.robot.y) + np.abs(a[2] * self.robot.theta))
         )
 
         self.rewards = [float(self.potential - potential_old), float(electricity_cost)]
         self.HUD(state, a, done)
         return state, sum(self.rewards), done, {}
 
-    def terminate(self, state):
+    def terminate(self):
         # if peg is not hold by the gripper
         p = self.robot.peg.pose().xyz()
-        v = np.array([state[0], state[2]]) - p[:2]
+        v = np.array([self.robot.x-p[0], self.robot.y-p[1]])
         d_gripper_peg = np.linalg.norm(v)
         if d_gripper_peg > 0.07:            
             done = True
@@ -68,15 +68,11 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
             done = False
 
         orn = self.robot.peg.pose().rpy()
-        ## peg_v = np.array([np.cos(orn[2]), np.sin(orn[2])])
-        peg_n = np.array([np.cos(orn[2]+np.pi/2.), np.sin(orn[2]+np.pi/2.)])
+        peg_v = np.array([np.cos(orn[2]), np.sin(orn[2])])
+        #peg_n = np.array([np.cos(orn[2]+np.pi/2.), np.sin(orn[2]+np.pi/2.)])
 
-        if abs(np.sum(v*peg_n)) > 0.02:
-            done = False
-
-        
-            
-        
+        if done is False and np.sum(v/d_gripper_peg*peg_v) < -0.5:
+            done = True
         return done
 
     def camera_adjust(self):
