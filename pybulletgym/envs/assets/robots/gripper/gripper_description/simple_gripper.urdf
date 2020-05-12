@@ -136,7 +136,7 @@
       </dynamics>
     </axis>      
     <limit effort="1000" lower="0.0" upper="0.04"
-           velocity="0" />
+           velocity="0.005" />
   </joint>  
   <link name="right_finger">
     <contact>
@@ -199,7 +199,7 @@
       </dynamics>
     </axis>
     <limit effort="2" lower="0.01" upper="0.04"
-           velocity="0" />
+           velocity="0.005" />
   </joint>  
   <link name="left_finger">
     <contact>

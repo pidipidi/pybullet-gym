@@ -17,7 +17,6 @@ class Gripper2D(URDFBasedRobot):
         self._p.setPhysicsEngineParameter(numSolverIterations=150)
         #self._p.setPhysicsEngineParameter(solverResidualThreshold=0)
         #self._p.setTimeStep(1./240.)
-        #self._p.setGravity(0, 0, -10)
 
         ## for i in range(self._p.getNumJoints(self.objects)):
         ##     print (self._p.getJointInfo(self.objects, i))
@@ -92,6 +91,8 @@ class Gripper2D(URDFBasedRobot):
         self.left_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
         self.right_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
         self.scene.global_step(False)
+        ## self._p.setGravity(0, -0.6, 0)
+        self.calc_state()
         #print (self._p.getPhysicsEngineParameters())
         ## print( "==============================")
         ## self.scene.global_step(False)
@@ -123,11 +124,10 @@ class Gripper2D(URDFBasedRobot):
                           self.jdict['z_axis_joint'].upperLimit))
         self.theta_joint.set_position( p , positionGain=0.1, force=2.)
 
-        p = float(np.clip(a[3],
+        p = np.clip(a[3], self.action_space.low[3], self.action_space.high[3])
+        p = float(np.clip(p+self.l_finger,
                           self.jdict['left_finger_joint'].lowerLimit,
                           self.jdict['left_finger_joint'].upperLimit))
-        ## p = 0.0245
-        ## print (p)
         self.left_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
         self.right_finger_joint.set_position( p, positionGain=0.5, velocityGain=10., force=3, maxVelocity=0.1 )
         ## if p<0.01:
@@ -139,7 +139,6 @@ class Gripper2D(URDFBasedRobot):
         ##     #self.left_finger_joint.set_torque( 15 )
         ##     #self.right_finger_joint.set_torque( 15 )
             
-
         #temp
         ## self.x_slider.set_velocity(0)
         ## self.y_slider.set_velocity(0)
@@ -191,7 +190,15 @@ class Gripper2D(URDFBasedRobot):
         ## ])
 
 
-    def calc_potential(self):
+    def calc_potential(self):        
         return -100. * ( np.sum(self.to_target_vec[:2]**2) + 0.01*abs(self.to_target_vec[-1]) )
 
+    def release_reward(self):
+        if abs(self.to_target_vec[0]) < 0.01 and \
+          abs(self.to_target_vec[1]) < 0.01 and \
+          abs(self.to_target_vec[-1]) < np.pi*15./180.:
+            return self.l_finger
+        else:
+            return self.jdict['left_finger_joint'].upperLimit-self.l_finger
+        
     

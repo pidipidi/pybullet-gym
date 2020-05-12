@@ -17,7 +17,7 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
 
         # peg in shallow hole scene
         timestep = 1./1000. #1./240.
-        scene = PegInShallowHoleScene(bullet_client, gravity=9.8, timestep=timestep, frame_skip=1)
+        scene = PegInShallowHoleScene(bullet_client, gravity=[0, 0, -9.8], timestep=timestep, frame_skip=1)
         scene.episode_restart(self._p)
         self.robot.parts, self.robot.jdict, self.robot.ordered_joints, self.robot.robot_body = self.robot.addToScene(self._p, scene.stadium)
         self.robot.parts, self.robot.jdict, self.robot.ordered_joints, self.robot.robot_body = self.robot.addToScene(self._p, scene.peg)
@@ -47,12 +47,13 @@ class GripperPegInHole2DPyBulletEnv(BaseBulletEnv):
         potential_old = self.potential
         self.potential = self.robot.calc_potential()
 
-        electricity_cost = (
-            # work velocity_input*angular_velocity
-            -0.001 * (np.abs(a[0] * self.robot.x) + np.abs(a[1] * self.robot.y) + np.abs(a[2] * self.robot.theta))
-        )
+        # work velocity_input*angular_velocity
+        electricity_cost = -0.001 * np.sum(np.square(a))
 
-        self.rewards = [float(self.potential - potential_old), float(electricity_cost)]
+        # release reward
+        release_rwd = self.robot.release_reward()
+
+        self.rewards = [float(self.potential - potential_old), float(electricity_cost), float(release_rwd)]
         self.HUD(state, a, done)
         return state, sum(self.rewards), done, {}
 

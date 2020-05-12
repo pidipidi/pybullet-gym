@@ -68,7 +68,10 @@ class World:
 
 	def clean_everything(self):
 		#p.resetSimulation()
-		self._p.setGravity(0, 0, -self.gravity)
+		if type(self.gravity) is list:
+			self._p.setGravity(self.gravity[0], self.gravity[1], self.gravity[2])
+		else:
+			self._p.setGravity(0, 0, -self.gravity)
 		#self._p.setDefaultContactERP(0.9)
 		#print("self.numSolverIterations=",self.numSolverIterations)
 		self._p.setPhysicsEngineParameter(fixedTimeStep=self.timestep*self.frame_skip,
