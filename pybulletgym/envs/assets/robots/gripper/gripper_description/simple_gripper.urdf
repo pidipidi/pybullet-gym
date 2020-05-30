@@ -1,4 +1,5 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <robot name="gripper"
        xmlns:xacro="http://www.ros.org/wiki/xacro">
 
@@ -33,7 +34,7 @@
     <child link="x_axis_link" />
     <axis xyz="1 0 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.005" />
+           velocity="0.05" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="x_axis_link">
@@ -52,7 +53,7 @@
     <child link="y_axis_link" />
     <axis xyz="0 1 0" />
     <limit effort="1000" lower="-0.25" upper="0.25"
-           velocity="0.005" />
+           velocity="0.05" />
     <!--<dynamics damping="100.0" />-->
   </joint>
   <link name="y_axis_link">
@@ -69,9 +70,8 @@
     <parent link="y_axis_link" />
     <child link="palm" />
     <axis xyz="0 0 1" />
-    <limit effort="1000" lower="-3.14" upper="3.14"
-           velocity="0.08" />
-    <!--<dynamics damping="100.0" />-->
+    <limit effort="1000" lower="-1.59" upper="4.73"
+           velocity="3.14" />
   </joint>  
   <link name="palm">
     <contact>
@@ -101,7 +101,7 @@
     </collision>
      <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="10.0001"/>
+      <mass value="1.0001"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>
@@ -129,23 +129,25 @@
     <child link="right_finger" />
     <axis xyz="0 1 0" >
       <dynamics>
-        <!-- <damping>0</damping> -->
+        <!-- <damping>10</damping> -->
         <!-- <friction>0</friction> -->
         <!-- <spring_reference>0</spring_reference> -->
         <!-- <spring_stiffness>0</spring_stiffness> -->
       </dynamics>
     </axis>      
-    <limit effort="1000" lower="0.0" upper="0.04"
-           velocity="0.005" />
+    <limit effort="10000" lower="0.005" upper="0.03"
+           velocity="0.2" />
   </joint>  
   <link name="right_finger">
     <contact>
       <friction_anchor/>
+      <!-- <stiffness value="30000.0"/> -->
+      <!-- <damping value="1000.0"/> -->
       <lateral_friction value="1."/>
       <rolling_friction value="0"/>
       <spinning_friction value="0"/>
       <contact_cfm value="0.0"/>
-      <contact_erp value="0.8"/>
+      <contact_erp value="0.9"/>
       <!-- <inertia_scaling value="0.1"/> -->
       <!-- <stiffness value="10000"/> -->
       <!-- <damping value="0.1"/> -->
@@ -155,7 +157,7 @@
       <geometry>
         <box size="0.03 0.005 0.05"/>
       </geometry>
-      <material name="blue"/>            
+      <material name="red"/>            
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -165,7 +167,7 @@
     </collision>
     <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="0.2"/>
+      <mass value="0.5"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>
@@ -192,23 +194,25 @@
     <child link="left_finger" />
     <axis xyz="0 -1 0">
       <dynamics>
-        <!-- <damping>0</damping> -->
+        <!-- <damping>10</damping> -->
         <!-- <friction>0</friction> -->
         <!-- <spring_reference>0</spring_reference> -->
         <!-- <spring_stiffness>0</spring_stiffness> -->
       </dynamics>
     </axis>
-    <limit effort="2" lower="0.01" upper="0.04"
-           velocity="0.005" />
+    <limit effort="10000" lower="0.005" upper="0.03"
+           velocity="0.2" />
   </joint>  
   <link name="left_finger">
     <contact>
       <friction_anchor/>
+      <!-- <stiffness value="30000.0"/> -->
+      <!-- <damping value="1000.0"/> -->
       <lateral_friction value="1."/>
       <rolling_friction value="0"/>
       <spinning_friction value="0"/>
       <contact_cfm value="0.0"/>
-      <contact_erp value="0.8"/>
+      <contact_erp value="0.9"/>
     </contact>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -225,7 +229,7 @@
     </collision>
     <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="0.2"/>
+      <mass value="0.5"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>

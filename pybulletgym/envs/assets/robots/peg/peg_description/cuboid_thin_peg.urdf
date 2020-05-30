@@ -33,6 +33,7 @@
     <child link="peg_x_link" />
     <axis xyz="1 0 0" />
     <limit effort="10" velocity="0.01" />
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="peg_x_link">
     <inertial>
@@ -50,7 +51,7 @@
     <child link="peg_y_link" />
     <axis xyz="0 1 0" />
     <limit effort="10" velocity="0.01" />
-    <!--<dynamics damping="100.0" />-->
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="peg_y_link">
     <inertial>
@@ -67,18 +68,10 @@
     <child link="peg" />
     <axis xyz="0 0 1" />
     <limit effort="10" velocity="0.1" />
-    <!--<dynamics damping="100.0" />-->
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   
   <link name="peg">
-    <!-- <contact> -->
-    <!--   <friction_anchor/> -->
-    <!--   <lateral_friction value="1."/> -->
-    <!--   <rolling_friction value="0.0"/> -->
-    <!--   <spinning_friction value="0.0"/> -->
-    <!--   <contact_cfm value="0.0"/> -->
-    <!--   <contact_erp value="0.8"/> -->
-    <!-- </contact> -->
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>

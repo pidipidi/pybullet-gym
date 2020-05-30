@@ -48,6 +48,7 @@ class BaseBulletEnv(gym.Env):
 			self.ownsPhysicsClient = True
 
 			if self.isRender:
+				#self._p = bullet_client.BulletClient()
 				self._p = bullet_client.BulletClient(connection_mode=pybullet.GUI)
 			else:
 				self._p = bullet_client.BulletClient()
@@ -55,7 +56,7 @@ class BaseBulletEnv(gym.Env):
 			self.camera._p = self._p
 			self.camera_adjust()
 			self.physicsClientId = self._p._client
-			self._p.configureDebugVisualizer(pybullet.COV_ENABLE_GUI,0)
+			## self._p.configureDebugVisualizer(pybullet.COV_ENABLE_GUI,1)
 
 		## self._p.resetSimulation()
 		if self.scene is None:
@@ -78,7 +79,6 @@ class BaseBulletEnv(gym.Env):
 			self.isRender = True
 		if mode != "rgb_array":
 			return np.array([])
-
 		base_pos = [0,0,0]
 		if hasattr(self,'robot'):
 			if hasattr(self.robot,'body_xyz'):

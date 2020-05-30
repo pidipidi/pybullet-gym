@@ -33,6 +33,7 @@
     <child link="peg_x_link" />
     <axis xyz="1 0 0" />
     <limit effort="10" velocity="0.01" />
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="peg_x_link">
     <inertial>
@@ -50,7 +51,7 @@
     <child link="peg_y_link" />
     <axis xyz="0 1 0" />
     <limit effort="10" velocity="0.01" />
-    <!--<dynamics damping="100.0" />-->
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   <link name="peg_y_link">
     <inertial>
@@ -67,10 +68,17 @@
     <child link="peg" />
     <axis xyz="0 0 1" />
     <limit effort="10" velocity="0.1" />
-    <!--<dynamics damping="100.0" />-->
+    <dynamics damping="0.0" friction="0.0"/>
   </joint>
   
   <link name="peg">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <inertia_scaling value="3.0"/>
+      <!-- <contact_cfm value="0.0"/> -->
+      <!-- <contact_erp value="1.0"/> -->
+    </contact>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
@@ -86,28 +94,35 @@
     </collision>
     <inertial>
       <origin rpy="0 0 0"/>
-      <mass value="0.1"/>
+      <mass value="1.01"/>
       <inertia ixx="28054E-9" ixy="0" ixz="0" iyy="28054E-9" iyz="0.0"
                izz="28054E-9"/>
     </inertial>
   </link>
 
   <joint name="peg_left_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.04 0 0" rpy="0.0 0.0 0.0"/>
     <parent link="peg" />
     <child link="peg_left" />
   </joint>
   
   <link name="peg_left">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <inertia_scaling value="3.0"/>
+      <!-- <contact_cfm value="0.0"/> -->
+      <!-- <contact_erp value="1.0"/> -->
+    </contact>
     <visual>
-      <origin rpy="0 0 0" xyz="-0.04 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder length="0.05" radius="0.01" />
       </geometry>
       <material name="green"/>            
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="-0.04 0 0"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <cylinder length="0.05" radius="0.01" />
       </geometry>
@@ -121,23 +136,30 @@
   </link>
 
   <joint name="peg_right_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.04 0 0" rpy="0 0 0"/>
     <parent link="peg" />
     <child link="peg_right" />
   </joint>
   
   <link name="peg_right">
+    <contact>
+      <lateral_friction value="1.0"/>
+      <rolling_friction value="0.0"/>
+      <inertia_scaling value="3.0"/>
+      <!-- <contact_cfm value="0.0"/> -->
+      <!-- <contact_erp value="1.0"/> -->
+    </contact>
     <visual>
-      <origin rpy="0 0 0" xyz="0.04 0 0"/>
+      <origin rpy="0 0 0" xyz="0.0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.0091" />
+        <cylinder length="0.05" radius="0.01" />
       </geometry>
       <material name="green"/>            
     </visual>
     <collision>
-      <origin rpy="0 0 0" xyz="0.04 0 0"/>
+      <origin rpy="0 0 0" xyz="0.0 0 0"/>
       <geometry>
-        <cylinder length="0.05" radius="0.000091" />
+        <cylinder length="0.05" radius="0.01" />
       </geometry>
     </collision>
     <inertial>

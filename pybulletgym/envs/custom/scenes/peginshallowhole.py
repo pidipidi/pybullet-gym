@@ -34,6 +34,8 @@ class StadiumScene(Scene):
 				self._p.changeVisualShape(i,-1,rgbaColor=[1,1,1,0.8])
 				self._p.configureDebugVisualizer(pybullet.COV_ENABLE_PLANAR_REFLECTION,1)
 
+            
+
 		#	for j in range(pybullet.getNumJoints(i)):
 		#		self._p.changeDynamics(i,j,lateralFriction=0)
 		#despite the name (stadium_no_collision), it DID have collision, so don't add duplicate ground

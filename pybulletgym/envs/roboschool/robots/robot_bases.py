@@ -330,10 +330,20 @@ class Joint:
 			vel
 		)
 
+	def enable_ft_sensor(self):
+		self._p.enableJointForceTorqueSensor(self.bodies[self.bodyIndex], self.jointIndex, True)
+
 	def get_state(self):
-		x, vx,_,_ = self._p.getJointState(self.bodies[self.bodyIndex], self.jointIndex)
+		x, vx, f,_ = self._p.getJointState(self.bodies[self.bodyIndex], self.jointIndex)
 		return x, vx
 
+	def get_full_state(self):
+		x, vx, f, t = self._p.getJointState(self.bodies[self.bodyIndex], self.jointIndex)
+		return x, vx, f, t
+
+	def get_joint_info(self):
+		return self._p.getJointInfo(self.bodies[self.bodyIndex], self.jointIndex)
+    
 	def get_position(self):
 		x, _ = self.get_state()
 		return x

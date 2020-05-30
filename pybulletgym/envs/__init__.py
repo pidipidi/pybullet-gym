@@ -24,6 +24,42 @@ register(
 	)
 
 
+register(
+	id='GripperPegInHole2DPyBulletEnv-v1',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_peginhole_2d_env:GripperPegInHole2DPyBulletEnv_Force',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
+register(
+	id='GripperPegInHole2DPyBulletEnv-v4',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_peginhole_2d_env:GripperPegInHole2DPyBulletEnv_ForceWindow',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
+register(
+	id='GripperPegInHole2DPyBulletEnv-v2',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_cam_peginhole_2d_env:GripperCamPegInHole2DPyBulletEnv',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
+register(
+	id='GripperPegInHole2DPyBulletEnv-v3',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_cam_peginhole_2d_env:GripperCamPegInHole2DPyBulletEnv_Force',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
+register(
+	id='GripperPegInHole2DPyBulletEnv-v6',
+	entry_point='pybulletgym.envs.custom.envs.peginhole_2d.gripper_cam_peginhole_2d_env:GripperCamPegInHole2DPyBulletEnv_ForceWindow',
+	max_episode_steps=1000,
+	reward_threshold=20.0,
+	)
+
+
 # roboschool envs
 ## pendula
 register(
